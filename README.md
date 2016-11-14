@@ -1,1 +1,2 @@
-# burger-sequelize-app
+# Burger
+handle bars constructed app 
