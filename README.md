@@ -1,2 +1,2 @@
 # Burger
-handle bars constructed app 
+handle bars constructed app & sequelize
