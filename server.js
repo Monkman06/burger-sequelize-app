@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override')
-var models = require('./models');
 
 var app = express();
 //Serve static content for the app from the "public" directory in the application directory.
