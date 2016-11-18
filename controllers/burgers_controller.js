@@ -1,39 +1,57 @@
-/*Here is where you create all the functions that will do the routing for your app, and the logic of each route.
-*/
+
+// var models  = require('../models');
+var burger  = require('../models')["Burger"];
 var express = require('express');
-var router = express.Router();
-var burger = require('../models/burger.js');
+var router  = express.Router();
 
-//get route -> index
+
 router.get('/', function(req,res) {
-    res.redirect('/burgers')
+		res.redirect('/burgers')
 });
 
-router.get('/burgers', function(req,res) {
-  //express callback response by calling burger.selectAllBurger
-  burger.all(function(burger_data){
-    //wrapper for orm.js that using MySQL query callback will return burger_data, render to index with handlebar
-    res.render('index', {burger_data});
-  });
+
+
+
+router.get('/burgers', function(req, res) {
+
+
+  burger.findAll()
+
+  .then(function(burger_data) {
+  return res.render('index', {burger_data});
+});
 });
 
-//post route -> back to index
-router.post('/burgers/create', function(req, res) {
-  //takes the request object using it as input for buger.addBurger
-  burger.create(req.body.burger_name, function(result){
-    //wrapper for orm.js that using MySQL insert callback will return a log to console, render back to index with handle
-    console.log(result);
+
+
+router.post('/burgers/create', function (req, res) {
+  
+
+    burger.create({
+    burger_name: req.body.burger_name,
+
+  })
+  .then(function() {
     res.redirect('/');
-  });
+  })
 });
 
-//put route -> back to index
+
+
+
 router.put('/burgers/update', function(req,res){
-  burger.update(req.body.burger_id, function(result){
-    //wrapper for orm.js that using MySQL update callback will return a log to console, render back to index with handle
-    console.log(result);
-    res.redirect('/');
-  });
+    // update one of the burgers
+    burger.findOne({where:{id: req.body.burger_id}})
+    .then(function(theBurger){
+        return theBurger.updateAttributes({
+            devoured: true
+        }).then(function(){
+            // reload the page
+            res.redirect('/');
+        })
+    });
 });
 
+
+module.exports = router;
 module.exports = router;
